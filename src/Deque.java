@@ -2,7 +2,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Deque<Item> implements Iterable<Item>{
+public class Deque<Item> implements Iterable<Item> {
 
     private Node first = new Node();
     private Node last = new Node();
@@ -99,24 +99,20 @@ public class Deque<Item> implements Iterable<Item>{
         if (isEmpty())
             throw new NoSuchElementException();
         
-        delete(first.next);
+        Node tmp = first.next;
+        delete(tmp);
         modNum++;
-        if (first.next != null)
-            return first.next.data;
-        else 
-            return null;
+        return tmp.data;
     }
     
     public Item removeLast() {
         if (isEmpty())
             throw new NoSuchElementException();
         
-        delete(last.prev);
+        Node tmp = last.prev;
+        delete(tmp);
         modNum++;
-        if (last.prev != null)
-            return last.prev.data;
-        else
-            return null;
+        return tmp.data;
     }
         
     @Override
