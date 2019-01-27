@@ -1,9 +1,13 @@
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item>{
 
     private Node first = new Node();
     private Node last = new Node();
+    private int sizeQ = 0;
+    private int modNum = 0;
     
     private class Node {
         Node next;
@@ -33,6 +37,7 @@ public class Deque<Item> implements Iterable<Item>{
             node.prev.next = newNode;
         
         node.prev = newNode;
+        sizeQ++;
         return newNode;
     }
     
@@ -48,13 +53,13 @@ public class Deque<Item> implements Iterable<Item>{
             node.next.prev = newNode;
         
         node.next = newNode;
+        sizeQ++;
         return newNode;
     }
     
-    private void delete(Node node)
-    {
+    private void delete(Node node) {
         if (node == null)
-            return;
+            throw new NoSuchElementException();
         
         if (node.prev != null)
             node.prev.next = node.next;
@@ -63,30 +68,45 @@ public class Deque<Item> implements Iterable<Item>{
             node.next.prev = node.prev;
         
         node = null;
+        sizeQ--;
     }
     
-    public void addFirst(Item item)
-    {
+    public boolean isEmpty() {
+        return (sizeQ == 0);
+    }
+    
+    public int size() {
+        return sizeQ;
+    }
+    
+    public void addFirst(Item item) {
+        if (item == null)
+            throw new IllegalArgumentException("Cannot add null element to the beginning of the Deque");
+        
         addAfter(item, first);
+        modNum++;
     }
     
-    public void addLast(Item item)
-    {
+    public void addLast(Item item) {
+        if (item == null)
+            throw new IllegalArgumentException("Cannot add null element to the end of the Deque");
+
         addBefore(item, last);
+        modNum++;
     }
     
-    public Item removeFirst()
-    {
+    public Item removeFirst() {
         delete(first.next);
+        modNum++;
         if (first.next != null)
             return first.next.data;
         else 
             return null;
     }
     
-    public Item removeLast()
-    {
+    public Item removeLast() {
         delete(last.prev);
+        modNum++;
         if (last.prev != null)
             return last.prev.data;
         else
@@ -95,8 +115,44 @@ public class Deque<Item> implements Iterable<Item>{
         
     @Override
     public Iterator<Item> iterator() {
-        // TODO Auto-generated method stub
-        return null;
+        return new DequeIterator();
+    }
+    
+    private class DequeIterator implements Iterator<Item> {
+
+        private Node currentNode = first;
+        private int currModNum = modNum;
+        
+        @Override
+        public boolean hasNext() {
+            if (currentNode == null) {
+                currentNode = first;
+                return false;
+            }
+            
+            if(currentNode.next == last)
+                return false;
+            
+            return true;
+        }
+
+        @Override
+        public Item next() {
+            if (currModNum != modNum)
+                throw new ConcurrentModificationException("Dequeue was modified");
+            
+            if (hasNext()) {
+                currentNode = currentNode.next;
+                return currentNode.data;
+            }
+            else
+                throw new NoSuchElementException();
+        }
+        
+        @Override
+        public void remove () {
+            throw new UnsupportedOperationException();
+        }
     }
 
 }
