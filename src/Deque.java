@@ -4,8 +4,8 @@ import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
 
-    private Node first = new Node();
-    private Node last = new Node();
+    private final Node first = new Node();
+    private final Node last = new Node();
     private int sizeQ = 0;
     private int modNum = 0;
     
@@ -67,7 +67,6 @@ public class Deque<Item> implements Iterable<Item> {
         if (node.next != null)
             node.next.prev = node.prev;
         
-        node = null;
         sizeQ--;
     }
     
@@ -123,7 +122,7 @@ public class Deque<Item> implements Iterable<Item> {
     private class DequeIterator implements Iterator<Item> {
 
         private Node currentNode = first;
-        private int currModNum = modNum;
+        private final int currModNum = modNum;
         
         @Override
         public boolean hasNext() {
@@ -132,7 +131,7 @@ public class Deque<Item> implements Iterable<Item> {
                 return false;
             }
             
-            if(currentNode.next == last)
+            if (currentNode.next == last)
                 return false;
             
             return true;
@@ -152,7 +151,7 @@ public class Deque<Item> implements Iterable<Item> {
         }
         
         @Override
-        public void remove () {
+        public void remove() {
             throw new UnsupportedOperationException();
         }
     }

@@ -6,7 +6,7 @@ import edu.princeton.cs.algs4.StdRandom;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    private Node first = new Node();
+    private final Node first = new Node();
     private int sizeQ = 0;
     private int modNum = 0;
     
@@ -14,6 +14,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         Node next;
         Node prev;
         Item data;
+    }
+    
+    public RandomizedQueue() {
+        first.next = null;
+        first.prev = null;
+        first.data = null;
     }
     
     private Node addAfter(Item item, Node node)
@@ -43,16 +49,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (node.next != null)
             node.next.prev = node.prev;
         
-        node = null;
         sizeQ--;
     }
         
-    public RandomizedQueue() {
-        first.next = null;
-        first.prev = null;
-        first.data = null;
-    }
-
     public boolean isEmpty() {
         return (sizeQ == 0);
     }
@@ -88,12 +87,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new NoSuchElementException();
         
         int n = StdRandom.uniform(sizeQ);
-        Iterator<Item> iter = iterator();
-        for (int i = 0; i < n; i++) {
-            iter.next();
-        }
+        Node tmp = first;
+        for (int i = 0; i <= n; i++)
+            tmp = tmp.next;
         
-        return iter.next();
+        return tmp.data;
     }
     
     @Override
@@ -102,10 +100,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
     
     private class RandomizedQueueIterator implements Iterator<Item> {
-        
-        private int currModNum = modNum;
+        private final int currModNum = modNum;
         private Node currentNode = first;
-
+        private Node[] nodes;
+        
         @Override
         public boolean hasNext() {
             if (currentNode == null) {
@@ -123,7 +121,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         public Item next() {
             if (currModNum != modNum)
                 throw new ConcurrentModificationException("Dequeue was modified");
-            
+
             if (hasNext()) {
                 currentNode = currentNode.next;
                 return currentNode.data;
@@ -133,7 +131,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
         
         @Override
-        public void remove () {
+        public void remove() {
             throw new UnsupportedOperationException();
         }    
     }
@@ -141,7 +139,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public static void main(String[] args) {
         RandomizedQueue<Integer> intQ = new RandomizedQueue<Integer>();
         System.out.println();
-        for (int i = 0; i < 10; i ++) {
+        for (int i = 0; i < 10; i++) {
             intQ.enqueue(i);
             System.out.print(i + " ");
         }
