@@ -1,30 +1,21 @@
 import java.util.Iterator;
 
+import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdRandom;
 
 public class Permutation {
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
-        RandomizedQueue<Integer> intQ = new RandomizedQueue<Integer>();
-        System.out.println();
-        for (int i = 0; i < 10; i ++) {
-            intQ.enqueue(i);
-            System.out.print(i + " ");
+        int k = Integer.parseInt(args[0]);
+        RandomizedQueue<String> q = new RandomizedQueue<String>();
+        for (int i = 0; i < k; i++) {
+            String str = StdIn.readString();
+            q.enqueue(str);
         }
-        System.out.println();
         
-        Iterator<Integer> iter = intQ.iterator();
-        while (iter.hasNext())
-            System.out.print(iter.next() + " ");
-        System.out.println();
-        
-        while (!intQ.isEmpty()) {
-            System.out.print(intQ.dequeue() + " ");
+        while (!q.isEmpty() ) {
+            System.out.println(q.dequeue());
         }
-        System.out.println();
-        
-           
     }
 
 }

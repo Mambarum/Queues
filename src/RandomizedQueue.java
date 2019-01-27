@@ -135,6 +135,30 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         @Override
         public void remove () {
             throw new UnsupportedOperationException();
-        }    }
+        }    
+    }
+
+    public static void main(String[] args) {
+        RandomizedQueue<Integer> intQ = new RandomizedQueue<Integer>();
+        System.out.println();
+        for (int i = 0; i < 10; i ++) {
+            intQ.enqueue(i);
+            System.out.print(i + " ");
+        }
+        System.out.println();
+        
+        Iterator<Integer> iter = intQ.iterator();
+        while (iter.hasNext())
+            System.out.print(iter.next() + " ");
+        System.out.println();
+        
+        while (!intQ.isEmpty()) {
+            System.out.print(intQ.dequeue() + " ");
+        }
+        System.out.println();
+        
+           
+    }
+
 
 }

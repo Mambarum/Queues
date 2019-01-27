@@ -96,6 +96,9 @@ public class Deque<Item> implements Iterable<Item>{
     }
     
     public Item removeFirst() {
+        if (isEmpty())
+            throw new NoSuchElementException();
+        
         delete(first.next);
         modNum++;
         if (first.next != null)
@@ -105,6 +108,9 @@ public class Deque<Item> implements Iterable<Item>{
     }
     
     public Item removeLast() {
+        if (isEmpty())
+            throw new NoSuchElementException();
+        
         delete(last.prev);
         modNum++;
         if (last.prev != null)
